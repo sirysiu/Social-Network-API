@@ -22,10 +22,6 @@ const names = [
   'Abdulbasir',
   'Abdulkadir',
   'Abdulkarem',
-  'Smith',
-  'Jones',
-  'Coollastname',
-  'enter_name_here',
   'Ze',
   'Zechariah',
   'Zeek',
@@ -56,44 +52,34 @@ const names = [
   'Zubair',
   'Zubayr',
   'Zuriel',
-  'Xander',
-  'Jared',
-  'Courtney',
-  'Gillian',
-  'Clark',
-  'Jared',
-  'Grace',
-  'Kelsey',
-  'Tamar',
-  'Alex',
-  'Mark',
-  'Tamar',
-  'Farish',
-  'Sarah',
-  'Nathaniel',
-  'Parker',
+  ``,
 ];
 
-const appDescriptions = [
-  'Decision Tracker',
-  'Find My Phone',
-  'Learn Piano',
-  'Starbase Defender',
-  'Tower Defense',
-  'Monopoly Money Manager',
-  'Movie trailers',
+const descriptionsBodies = [
+  'How to disagree with someone',
+  'iPhone review',
+  'how-to video',
+  'video essay on the history of video games',
+  'How to make money on the App Store',
+  'Learn NextJS in five minutes (Not clickbate)',
+  'Movie trailer',
   'Hello world',
-  'Stupid Social Media App',
-  'Notes',
-  'Messages',
-  'Email',
-  'Compass',
-  'Firefox',
-  'Running app',
-  'Cooking app',
-  'Poker',
-  'Deliveries',
+  'Another possible solution to the algorithm',
+  'Apology video',
+  'Submission for startup pitch',
 ];
+
+const possibleResponses = [
+  'I disagree!',
+  'I tried your algorithm, here were the results',
+  'This was awesome',
+  'Thank you for the great content',
+  'Please check out my video response',
+  'Like and subscribe to my channel please',
+  'Reply: The side effects of in app purchases on digital marketplaces',
+];
+
+const users = [];
 
 // Get a random item given an array
 const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -102,17 +88,34 @@ const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const getRandomName = () =>
   `${getRandomArrItem(names)} ${getRandomArrItem(names)}`;
 
-// Function to generate random assignments that we can add to student object.
-const getRandomAssignments = (int) => {
-  const results = [];
+// Function to generate random videos that we can add to the database. Includes video responses.
+const getRandomVideos = (int) => {
+  let results = [];
   for (let i = 0; i < int; i++) {
     results.push({
-      assignmentName: getRandomArrItem(appDescriptions),
-      score: Math.floor(Math.random() * (99 - 70 + 1) + 70),
+      published: Math.random() < 0.5,
+      description: getRandomArrItem(descriptionsBodies),
+      advertiserFriendly: Math.random() < 0.5,
+      responses: [...getVideoResponses(3)],
+    });
+  }
+  return results;
+};
+
+// Create the responses that will be added to each video
+const getVideoResponses = (int) => {
+  if (int === 1) {
+    return getRandomArrItem(possibleResponses);
+  }
+  let results = [];
+  for (let i = 0; i < int; i++) {
+    results.push({
+      responseBody: getRandomArrItem(possibleResponses),
+      username: getRandomName(),
     });
   }
   return results;
 };
 
 // Export the functions for use in seed.js
-module.exports = { getRandomName, getRandomAssignments };
+module.exports = { getRandomName, getRandomVideos, getRandomVideos };
