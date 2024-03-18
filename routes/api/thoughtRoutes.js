@@ -1,28 +1,23 @@
 const router = require('express').Router();
+
+// This will grab the actual mongoose functions from the controllers file. 
 const {
-  getVideos,
-  getSingleVideo,
-  createVideo,
-  updateVideo,
-  deleteVideo,
-  addVideoResponse,
-  removeVideoResponse,
-} = require('../../controllers/videoController');
+  getThoughts,
+  getSingleThought,
+  createThought,
+  updateThought,
+  deleteThought,
+  addReaction,
+  deleteReaction,
+} = require('../../controllers/thoughtController');
 
-// /api/videos
-router.route('/').get(getVideos).post(createVideo);
+// route for /api/thoughts
+router.route('/').get(getThoughts).post(createThought);
 
-// /api/videos/:videoId
-router
-  .route('/:videoId')
-  .get(getSingleVideo)
-  .put(updateVideo)
-  .delete(deleteVideo);
-
-// /api/videos/:videoId/responses
-router.route('/:videoId/responses').post(addVideoResponse);
-
-// /api/videos/:videoId/responses/:responseId
-router.route('/:videoId/responses/:responseId').delete(removeVideoResponse);
+// route for /api/thoughts/:thoughtId/reactions
+router.route('/:thoughtId').get(getSingleThought)
+.put(updateThought).delete(deleteThought);
+router.route('/:thoughtId/reactions').post(addReaction);
+router.route('/:thoughtId/reactions/:reactionId').delete(deleteReaction);
 
 module.exports = router;
