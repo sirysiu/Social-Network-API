@@ -1,45 +1,40 @@
 const { Schema, model } = require('mongoose');
 const Reaction = require('./Reaction');
 
-// Schema to create Post model
+// Schema to create User model
 const thoughtSchema = new Schema(
   {
-    published: {
-      type: Boolean,
-      default: false,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    advertiserFriendly: {
-      type: Boolean,
-      default: true,
-    },
-    description: {
-      type: String,
-      minLength: 15,
-      maxLength: 500,
-    },
-    responses: [Response],
+      thoughtText: {
+          type: String, required: true, minLenth: 1, maxLength: 280,
+      },
+      createdAt: {
+          type: Date, 
+          default: Date.now,
+          // This is the function that formats the time. 
+          get: function (timestamp) {
+              return timestamp.toLocaleString();
+            },
+          // TODO: Getter for formatting the timestamp on query. 
+      },
+      username: {
+          // TODO: Refrence the user making the thought. Unsure if ref:user is correct, it is probably not. 
+          type: String, ref: 'user',
+      },
+      reactions: [Reaction]
   },
   {
-    toJSON: {
-      virtuals: true,
-    },
-    id: false,
+      toJSON: {
+          virtuals: true,
+          getters: true,
+      },
+      id: false,
   }
 );
 
-// Create a virtual property `responses` that gets the amount of response per video
-videoSchema
-  .virtual('getResponses')
-  // Getter
-  .get(function () {
-    return this.responses.length;
-  });
+thoughtSchema.virtual('reactionCount').get(function () {
+  return this.reactions.length;
+});
 
-// Initialize our Video model
-const Video = model('video', videoSchema);
+const Thought = model('thought', thoughtSchema);
 
-module.exports = Video;
+module.exports = Thought;
